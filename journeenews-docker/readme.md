@@ -1,4 +1,4 @@
-# JourneeNews (**varna** različica)
+# JourneeNews (**NEvarna** različica)
 
 ### Aplikacija za diplomsko nalogo, FRI
 

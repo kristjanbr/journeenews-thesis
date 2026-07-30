@@ -86,23 +86,6 @@ class JourneyController {
             $errors["picture_url"] = "";
             
             $pic_data = $_FILES['picture_data'];
-
-            if (!empty($pic_data['tmp_name'])) {
-                $finfo = new finfo(FILEINFO_MIME_TYPE);
-                $mime = $finfo->file($pic_data['tmp_name']);
-
-                $allowed = [
-                    'image/jpeg' => 'jpg',
-                    'image/png'  => 'png',
-                    'image/gif'  => 'gif',
-                    'image/webp' => 'webp'
-                ];
-
-                if (!array_key_exists($mime, $allowed)) {
-                    $errors["picture_url"] = "Only valid image files are allowed.";
-                }
-            }
-
             if($pic_data['name']==='' && $_POST["picture_url"]!==''){
                 $errors["picture_url"] = $data["picture_url"] === false ? "Invalid image URL." : "";
             }
@@ -166,7 +149,6 @@ class JourneyController {
             JourneyController::error403();
         }
 
-        
     }    
 
     // Editing post
@@ -210,27 +192,10 @@ class JourneyController {
         }
         else{
             $pic_data = $_FILES['picture_data'];
-
-            if (!empty($pic_data['tmp_name'])) {
-                $finfo = new finfo(FILEINFO_MIME_TYPE);
-                $mime = $finfo->file($pic_data['tmp_name']);
-
-                $allowed = [
-                    'image/jpeg' => 'jpg',
-                    'image/png'  => 'png',
-                    'image/gif'  => 'gif',
-                    'image/webp' => 'webp'
-                ];
-
-                if (!array_key_exists($mime, $allowed)) {
-                    $errors["picture_url"] = "Only valid image files are allowed.";
-                }
-            }
-
             if($pic_data['name']==='' && $_POST["picture_url"]!==''){
                 $errors["picture_url"] = $data["picture_url"] === false ? "Invalid image URL." : "";
             }
-            
+
             $isDataValid = true;
             foreach ($errors as $error) {
                 $isDataValid = $isDataValid && empty($error);
@@ -317,16 +282,7 @@ class JourneyController {
     }
 
     public static function comment($authStatus) {
-	$rules = [
-            "comment" => FILTER_SANITIZE_SPECIAL_CHARS,
-            "username" => FILTER_SANITIZE_SPECIAL_CHARS,
-            "id" => [
-                "filter" => FILTER_VALIDATE_INT,
-                "options" => ["min_range" => 1]
-            ]
-        ];
-        $data = filter_input_array(INPUT_POST, $rules);
-
+        $data = $_POST;
         if(!isset($data) || !$data['id']){
             JourneyController::error403();
             exit;
